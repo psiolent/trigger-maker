@@ -7,7 +7,7 @@ describe('trigger', function() {
 	var t;
 	beforeEach(function() {
 		// create a new trigger for testing
-		t  = trigger.create();
+		t = trigger.create();
 	});
 
 	it('does not accept invalid argument types', function() {
@@ -126,5 +126,78 @@ describe('trigger', function() {
 		});
 		t.fire('e', a[0], a[1], a[2]);
 		expect(p).to.deep.equal(a);
+	});
+
+	it('can fire event asynchronously', function(done) {
+		var fired = false;
+		var timeoutToken = null;
+		t.on('e', function() {
+			done();
+		});
+		t.fire('e');
+		expect(fired).to.be.false;
+	});
+
+	it('does not register callbacks twice', function() {
+		function cb() {
+		}
+
+		expect(t.on('event', cb)).to.be.true;
+		expect(t.on('event', cb)).to.be.false;
+		expect(t.listenerCount('event')).to.equal(1);
+	});
+
+	it('does not unregister callbacks not registered', function() {
+		function cb() {
+		}
+
+		expect(t.off('event', cb)).to.be.false;
+	});
+
+	it('accurately counts registered callbacks', function() {
+		function cb1() {
+		}
+
+		function cb2() {
+		}
+
+		expect(t.listenerCount('e')).to.equal(0);
+		expect(t.hasListener('e', cb1)).to.be.false;
+		expect(t.hasListener('e', cb2)).to.be.false;
+		expect(t.hasListeners('e')).to.be.false;
+		t.on('e', cb1);
+		expect(t.listenerCount('e')).to.equal(1);
+		expect(t.hasListener('e', cb1)).to.be.true;
+		expect(t.hasListener('e', cb2)).to.be.false;
+		expect(t.hasListeners('e')).to.be.true;
+		t.on('e', cb2);
+		expect(t.listenerCount('e')).to.equal(2);
+		expect(t.hasListener('e', cb1)).to.be.true;
+		expect(t.hasListener('e', cb2)).to.be.true;
+		expect(t.hasListeners('e')).to.be.true;
+		t.off('e', cb1);
+		expect(t.listenerCount('e')).to.equal(1);
+		expect(t.hasListener('e', cb1)).to.be.false;
+		expect(t.hasListener('e', cb2)).to.be.true;
+		expect(t.hasListeners('e')).to.be.true;
+		t.off('e', cb2);
+		expect(t.listenerCount('e')).to.equal(0);
+		expect(t.hasListener('e', cb1)).to.be.false;
+		expect(t.hasListener('e', cb2)).to.be.false;
+		expect(t.hasListeners('e')).to.be.false;
+	});
+
+	it('reports active events', function() {
+		function cb() {
+		}
+		expect(t.activeEvents().sort()).to.deep.equal([]);
+		t.on('e1', cb);
+		expect(t.activeEvents().sort()).to.deep.equal(['e1']);
+		t.on('e2', cb);
+		expect(t.activeEvents().sort()).to.deep.equal(['e1', 'e2']);
+		t.off('e1');
+		expect(t.activeEvents().sort()).to.deep.equal(['e2']);
+		t.off('e2');
+		expect(t.activeEvents().sort()).to.deep.equal([]);
 	});
 });
