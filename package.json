@@ -1,0 +1,27 @@
+{
+  "name": "trigger-maker",
+  "version": "0.1.0",
+  "description": "Simple JavaScript event trigger maker",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psiolent/trigger-maker.git"
+  },
+  "author": "Aja Walker <aja@ajawalker.com> (http://www.ajawalker.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psiolent/trigger-maker/issues"
+  },
+  "homepage": "https://github.com/psiolent/trigger-maker#readme",
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-simple-mocha": "^0.4.0"
+  },
+  "dependencies": {
+  }
+}
