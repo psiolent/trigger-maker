@@ -1,6 +1,6 @@
 {
   "name": "trigger-maker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Simple JavaScript event trigger maker",
   "main": "index.js",
   "scripts": {
