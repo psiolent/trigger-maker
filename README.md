@@ -90,7 +90,7 @@ myTrigger.fire('event', arg1, arg2);
 
 ### Put It All Together
 
-```javscript
+```javascript
 var triggerMaker = require('trigger-maker');
 
 var myTrigger = triggerMaker.create();
